@@ -98,8 +98,11 @@ const LoanApplicationForm = ({ prefillData = { firstName: "", lastName: "", emai
       // Simulate API submission delay
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      // Build bank connection URL
-      const bankUrl = `https://banks-staging.talefin.com/v1/i/kultivo/${prefillData.vendorId}/banks?firstName=${encodeURIComponent(data.first_name)}&lastName=${encodeURIComponent(data.last_name)}&email=${encodeURIComponent(data.email)}&phoneNumber=${encodeURIComponent(data.phone_number)}&collect=account_owner&collect=analysis&success_url=${encodeURIComponent(prefillData.redirectUrl)}`;
+      // Generate vendor-specific UUID
+      const vendorSpecificId = crypto.randomUUID();
+      
+      // Build bank connection URL with the generated UUID as vendor ID
+      const bankUrl = `https://banks-staging.talefin.com/v1/i/kultivo/${vendorSpecificId}/banks?firstName=${encodeURIComponent(data.first_name)}&lastName=${encodeURIComponent(data.last_name)}&email=${encodeURIComponent(data.email)}&phoneNumber=${encodeURIComponent(data.phone_number)}&collect=account_owner&collect=analysis&success_url=${encodeURIComponent(prefillData.redirectUrl)}`;
       
       // Navigate to bank connection page with URL
       navigate("/connect-bank", { state: { bankUrl } });
@@ -225,8 +228,8 @@ const LoanApplicationForm = ({ prefillData = { firstName: "", lastName: "", emai
             
             <p className="text-xs text-gray-500 text-center mt-4">
               By signing up, you accept our{" "}
-              <a href="/terms" className="text-blue-600 hover:underline">Terms of Use</a> and{" "}
-              <a href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
+              <a href="https://www.kultivo.com.au/terms" className="text-blue-600 hover:underline">Terms of Use</a> and{" "}
+              <a href="https://www.kultivo.com.au/privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
             </p>
           </div>
         </form>
